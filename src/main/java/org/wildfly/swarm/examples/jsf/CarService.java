@@ -16,10 +16,13 @@ import javax.inject.Named;
 @ApplicationScoped
 public class CarService {
      
+    String name="Car Service";
+    
     private final static String[] colors;
      
     private final static String[] brands;
-     
+    
+    
     static {
         colors = new String[10];
         colors[0] = "Black";
@@ -54,7 +57,17 @@ public class CarService {
          
         return list;
     }
-     
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    
+    
     private String getRandomId() {
         return UUID.randomUUID().toString().substring(0, 8);
     }
