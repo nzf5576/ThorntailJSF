@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <title>iLendTech</title>
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+
+                    <style type="text/css">
+                    .logopanel, .ui-datepicker-calendar td.ui-datepicker-today a, .tabs2.ui-tabs .ui-tabs-nav li a {
+                    background: #f7f7f7 url(../img/mainbg.png) repeat-y 0 0;
+                    }
+                    </style>
+            </f:facet>
+            
+        </h:head>
+        <h:body>          
+          <ui:composition>  
+                      
+                    <div class="row-fluid">
+                        <div class="span8">
+                             <h4 class="widgettitle">Select Affiliate</h4>
+                                <div class="widgetcontent">
+                                    <h:form id="formAffiliates" prependId="false"> 
+                                        <p:outputLabel for="affiliates" value="Affiliates:" />
+                                        <p:selectOneMenu id="affiliates" value="#{productControllerBean.selectedaffiliate}" converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="Select One" itemValue="" /> 
+                                               <f:selectItems value="#{productControllerBean.allAffiliates}" var="affiliate" itemValue="#{affiliate}" itemLabel="#{affiliate.businessname}"/>
+                                            </p:selectOneMenu>  
+                                        <br></br>
+                                        <p:commandButton id="fetchButton" process="@form" update=":form1,:form2" value="Get Queues and Roles" actionListener="#{productControllerBean.loadQueuesAndRoles()}"/>          
+                                    </h:form>   
+                                </div><!--widgetcontent-->
+                           </div><!--span8--> 
+                    </div> <!-- row-fluid -->
+                    <div class="row-fluid">
+                           <div class="span6">
+                            <h:form id="form1" prependId="false"> 
+                                <h4 class="widgettitle">Queues for: #{productControllerBean.selectedaffiliate.businessname}</h4>
+                            <div class="widgetcontent">
+
+                                    <p:dataTable id="dataTable1" var="iqueue" value="#{productControllerBean.queues}" 
+                                                 editable="true" 
+                                                 editMode="cell" 
+                                                 rows="20"
+                                                 rowKey="#{iqueue.queuesid}"
+                                                 selection="#{productControllerBean.selectedqueue}" 
+                                                 selectionMode="single" 
+                                                 styleClass="table table-bordered">
+                                         
+                                
+                                        <p:ajax event="rowSelect" process="@this" update=":form3" listener="#{productControllerBean.loadQueueRoleMaps(productControllerBean.selectedqueue.queuesid)}" /> 
+
+                                        <p:ajax event="cellEdit" listener="#{productControllerBean.onQueueEdit}" update="dataTable1" />       
+
+                                        <p:column headerText="Queue ID" style="width:25%" >
+                                            <h:outputText value="#{fn:substring(iqueue.queuesid,0,8)}" />
+                                        </p:column>  
+
+                                        <p:column headerText="Queue Name" style="width:25%">                                      
+                                             <p:cellEditor>
+                                                 <f:facet name="output"><h:outputText value="#{iqueue.queuename}" /></f:facet>
+                                                 <f:facet name="input"><p:inputText value="#{iqueue.queuename}" style="width:96%" label="Queue Name"/></f:facet>
+                                            </p:cellEditor>
+                                        </p:column>  
+
+
+                                        <p:column style="width:10%" >                                     
+                                            <p:commandButton  id="removeQueueButton" value="Remove" update="dataTable1" actionListener="#{productControllerBean.removeQueue(iqueue)}"/>
+                                        </p:column>
+
+
+                                        <p:column style="width:15%" >                                     
+                                            <p:commandButton  id="updateQueueButton"  value="Update" update="dataTable1" actionListener="#{productControllerBean.updateQueue(iqueue)}"/>
+                                        </p:column>
+
+
+                                        <f:facet name="header">
+                                            <p:commandButton process="dataTable1" update="dataTable1" value="Add Queue" actionListener="#{productControllerBean.addQueue()}" disabled="#{productControllerBean.selectedaffiliate == null? 'true': 'false'}" style="margin-bottom:14px; margin-left: 14px;font-size:14px; background:cross-fade"/>   
+                                        </f:facet> 
+                                    </p:dataTable>    
+
+                            </div><!--widgetcontent-->
+                            </h:form> 
+                           </div>
+                           <div class="span6">
+                            <h:form id="form2" prependId="false">   
+                            <h4 id="taskid" class="widgettitle">Roles for: #{productControllerBean.selectedaffiliate.businessname} </h4>
+                            <div class="widgetcontent">                          
+
+                                        <p:dataTable id="dataTable2" var="role"  
+                                                     editable="true" 
+                                                     editMode="cell" 
+                                                     value="#{productControllerBean.roles}" 
+                                                     styleClass="table table-bordered">
+                                       
+                                        <p:ajax event="cellEdit" listener="#{productControllerBean.onRoleEdit}" update="dataTable2" />      
+                                                                     
+                                        <p:column headerText="Role ID" style="width:25%">
+                                            <h:outputText value="#{fn:substring(role.rolesid,0,8)}" />
+                                            
+
+                                        </p:column>
+                                            <p:column headerText="Role Name" style="width:25%">                                      
+                                             <p:cellEditor>
+                                                 <f:facet name="output"><h:outputText value="#{role.rolename}" /></f:facet>
+                                                 <f:facet name="input"><p:inputText value="#{role.rolename}" style="width:96%" label="Role Name"/></f:facet>
+                                            </p:cellEditor>
+                                        </p:column>  
+
+
+
+                                        <p:column headerText="Selectable" style="width:10%">
+                                            <p:cellEditor>
+                                                <f:facet name="output"><h:outputText value="#{role.selectable}" /></f:facet>
+                                                <f:facet name="input">
+                                                    <h:selectOneMenu value="#{role.selectable}" style="width:100%">
+                                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                                        <f:selectItem itemLabel="YES" itemValue="YES" />
+                                                        <f:selectItem itemLabel="NO" itemValue="NO" />
+                                                  </h:selectOneMenu>
+                                                </f:facet>  
+                                            </p:cellEditor>
+                                        </p:column>   
+
+
+                                        <p:column style="width:15%" >                                     
+                                            <p:commandButton  id="removeButton" process="dataTable2" update="dataTable2" value="Remove"  actionListener="#{productControllerBean.removeRole(role)}"/>
+                                        </p:column>
+
+                                        <p:column style="width:15%" >                                     
+                                            <p:commandButton  id="updateRoleButton" process="dataTable2" update="dataTable2" value="Update" actionListener="#{productControllerBean.updateRole(role)}"/>
+                                        </p:column>
+
+                                       <f:facet name="header">
+                                        <p:commandButton process="dataTable2" update="dataTable2" value="Add Role" actionListener="#{productControllerBean.addRole()}" disabled="#{productControllerBean.selectedaffiliate == null? 'true': 'false'}" style="margin-bottom:14px; margin-left: 14px;font-size:14px; background:cross-fade"/>   
+                                        </f:facet> 
+                                    </p:dataTable>
+
+
+                            </div><!--widgetcontent-->
+                            </h:form> 
+                           </div>
+                    </div> <!--row-fluid-->
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <h:form id="form3" prependId="false">   
+                                <h4 id="taskid" class="widgettitle">Mapped Roles for: #{productControllerBean.selectedqueue.queuename} (#{fn:substring(productControllerBean.selectedqueue.queuesid,0,8)}) </h4>
+                            <div class="widgetcontent">                          
+
+                                        <p:dataTable id="dataTable3" var="queuerolemap"  
+                                                     editable="true" 
+                                                     editMode="cell" 
+                                                     value="#{productControllerBean.queuerolemaps}" 
+                                                     styleClass="table table-bordered">
+                                       
+                                         <p:ajax event="cellEdit" listener="#{productControllerBean.onRoleEdit}" update="dataTable3" />      
+                                        
+                                        <p:column headerText="Queue" style="width:25%">
+                                            <h:outputText value="#{queuerolemap.queuename}" />
+                                        </p:column>
+                                        <!--
+                                         <p:column headerText="Role" style="width:25%">                                      
+                                             <p:cellEditor>
+                                                 <f:facet name="output"><h:outputText value="#{queuerolemap.rolename}" /></f:facet>
+                                                 <f:facet name="input"><p:inputText value="#{queuerolemap.rolename}" style="width:96%" label="Role Name"/></f:facet>
+                                            </p:cellEditor>
+                                        </p:column>  
+                                         -->
+                                        <p:column headerText="Role" style="width:25%">                                      
+                                            <p:cellEditor>
+                                                <f:facet name="output"><h:outputText value="#{queuerolemap.rolename}" /></f:facet> <!--converter="omnifaces.SelectItemsConverter"-->
+                                                   <f:facet name="input">
+                                                       <h:selectOneMenu value="#{queuerolemap.rolename}"   style="width:100%">
+                                                            <f:selectItem itemLabel="Select One" itemValue="" />
+                                                            <f:selectItems value="#{productControllerBean.roles}" var="all" itemLabel="#{all.rolename}" itemValue="#{all.rolename}" />
+                                                       </h:selectOneMenu>
+                                                   </f:facet>
+                                           </p:cellEditor>
+                                        </p:column>
+
+                                        <p:column style="width:15%" >                                     
+                                            <p:commandButton  id="removeButton" process="dataTable3" update="dataTable3" value="Remove"  actionListener="#{productControllerBean.removeQueueRoleMap(queuerolemap)}"/>
+                                        </p:column>
+
+                                        <p:column style="width:15%" >                                     
+                                            <p:commandButton  id="updateRoleButton" process="dataTable3" update="dataTable3" value="Update" actionListener="#{productControllerBean.updateQueueRoleMap(queuerolemap)}"/>
+                                        </p:column>
+
+                                       <f:facet name="header">
+                                           <p:commandButton process="dataTable3" update="dataTable3" value="Add Map Role" actionListener="#{productControllerBean.addQueueRoleMap() }" disabled="#{productControllerBean.selectedqueue == null? 'true': 'false'}" style="margin-bottom:14px; margin-left: 14px;font-size:14px; background:cross-fade"/>   
+                                        </f:facet> 
+                                    </p:dataTable>
+                            </div><!--widgetcontent-->
+                            </h:form> 
+                        </div> <!-- span 6 -->
+                    </div> <!-- row fluid -->
+            </ui:composition>
+        </h:body>
+    </f:view>
+</html>

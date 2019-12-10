@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewClientCatalogProductsTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewClientCatalogProductsLabel_clientCatalogidClientCatalog}"/>
+                    <h:outputText value="#{clientCatalogProductsController.selected.clientCatalogidClientCatalog}" title="#{bundle.ViewClientCatalogProductsTitle_clientCatalogidClientCatalog}"/>
+                    <h:outputText value="#{bundle.ViewClientCatalogProductsLabel_listPrice}"/>
+                    <h:outputText value="#{clientCatalogProductsController.selected.listPrice}" title="#{bundle.ViewClientCatalogProductsTitle_listPrice}"/>
+                    <h:outputText value="#{bundle.ViewClientCatalogProductsLabel_negotiatedPrice}"/>
+                    <h:outputText value="#{clientCatalogProductsController.selected.negotiatedPrice}" title="#{bundle.ViewClientCatalogProductsTitle_negotiatedPrice}"/>
+                    <h:outputText value="#{bundle.ViewClientCatalogProductsLabel_upcharge}"/>
+                    <h:outputText value="#{clientCatalogProductsController.selected.upcharge}" title="#{bundle.ViewClientCatalogProductsTitle_upcharge}"/>
+                    <h:outputText value="#{bundle.ViewClientCatalogProductsLabel_clientSplit}"/>
+                    <h:outputText value="#{clientCatalogProductsController.selected.clientSplit}" title="#{bundle.ViewClientCatalogProductsTitle_clientSplit}"/>
+                    <h:outputText value="#{bundle.ViewClientCatalogProductsLabel_client}"/>
+                    <h:outputText value="#{clientCatalogProductsController.selected.client}" title="#{bundle.ViewClientCatalogProductsTitle_client}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{clientCatalogProductsController.destroyAndView}" value="#{bundle.ViewClientCatalogProductsDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewClientCatalogProductsEditLink}"/>
+                <br />
+                <h:commandLink action="#{clientCatalogProductsController.prepareCreate}" value="#{bundle.ViewClientCatalogProductsCreateLink}" />
+                <br />
+                <h:commandLink action="#{clientCatalogProductsController.prepareList}" value="#{bundle.ViewClientCatalogProductsShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewClientCatalogProductsIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <title>iLendTech</title>
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+
+                    <style type="text/css">
+                    .logopanel, .ui-datepicker-calendar td.ui-datepicker-today a, .tabs2.ui-tabs .ui-tabs-nav li a {
+                    background: #f7f7f7 url(../img/mainbg.png) repeat-y 0 0;
+                    }
+                    </style>
+                    
+                    <script type="text/javascript">
+                        function setSIDValue(new_value){
+                             window.alert("PRE :"+document.getElementById('tabView:dataTableWR:0:rsid').value);
+                             document.getElementById('tabView:dataTableWR:0:rsid').value = new_value;
+                             window.alert("POST :"+document.getElementById('tabView:dataTableWR:0:rsid').value+" Called from: "+document.getSelection());
+                        }
+                    </script>
+                    
+            </f:facet>
+            
+        </h:head>
+        <h:body>          
+          <ui:composition>  
+                    
+                    <div class="row-fluid">
+                        <div class="span8">
+                             <h4 class="widgettitle">Client Setup</h4>
+                                <div class="widgetcontent">
+                                    <h:form id="formAffiliates" prependId="false"> 
+                                        <p:outputLabel for="affiliates" value="Affiliates:" />
+                                            <p:selectOneMenu id="affiliates" value="#{productControllerBean.selectedClient}" converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="Select Client" itemValue="" noSelectionOption="true" />
+                                                <f:selectItems value="#{productControllerBean.allClients}" var="client" itemValue="#{client}" itemLabel="#{client.clientname}"/>
+                                            </p:selectOneMenu>  
+                                        <br></br>
+                                        <p:commandButton id="fetchButton" process="@form" update=":tabView" value="Get Pricing Dimensions" actionListener="#{productControllerBean.loadClientPricingDimensions()}"/>          
+                                    </h:form>   
+                                </div><!--widgetcontent-->
+                           </div><!--span8--> 
+                    </div> <!-- row-fluid -->
+                                  
+                    <p:tabView id="tabView" cache="false" class="span10" dynamic="false">  
+                        <p:tab id="alpha" title="Pricing Dimensions: #{productControllerBean.selectedClient.clientname}" disabled="#{productControllerBean.selectedClient == null? 'true': 'false'}">
+             
+                        </p:tab>
+                        <p:tab id="beta" title="Pricing Dimensions Catalog: #{productControllerBean.selectedClient.clientname}" disabled="#{productControllerBean.selectedClient == null? 'true': 'false'}">
+
+                        </p:tab>
+                        <p:tab id="delta" title="TBD" disabled="#{productControllerBean.selectedClient == null? 'true': 'false'}">   
+
+                        </p:tab>               
+
+                        <p:tab id="gamma" title="TBD" disabled="#{productControllerBean.selectedClient == null? 'true': 'false'}">  
+
+                        </p:tab>                       
+                    </p:tabView>
+                    
+            </ui:composition>
+        </h:body>
+    </f:view>
+</html>

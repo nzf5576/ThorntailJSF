@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <title>iLendTech</title>
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+
+                    <style type="text/css">
+                    .logopanel, .ui-datepicker-calendar td.ui-datepicker-today a, .tabs2.ui-tabs .ui-tabs-nav li a {
+                    background: #f7f7f7 url(../img/mainbg.png) repeat-y 0 0;
+                    }
+                    </style>
+                    
+                    <script type="text/javascript">
+                        function setSIDValue(new_value){
+                             window.alert("PRE :"+document.getElementById('tabView:dataTableWR:0:rsid').value);
+                             document.getElementById('tabView:dataTableWR:0:rsid').value = new_value;
+                             window.alert("POST :"+document.getElementById('tabView:dataTableWR:0:rsid').value+" Called from: "+document.getSelection());
+                        }
+                    </script>
+                    
+            </f:facet>
+            
+        </h:head>
+        <h:body>          
+          <ui:composition>  
+                    <h4 class="widgettitle">Pricing Setup</h4>
+                    <div class="row-fluid">
+                                <div class="span6">
+                                        <h4 class="widgettitle">Pricing Attribute</h4>
+                                        <div class="widgetcontent">                        
+                                                <h:form id="formP" > 
+                                                    <p:dataTable id="dataTable1" var="pricingdimensions" value="#{productAttributesControllerBean.allClientPricingDimensions}"
+                                                                 editable="false" 
+                                                                 rows="20"
+                                                                 rowKey="#{pricingdimensions.clientPricingDimensionsID}"
+                                                                 selection="#{productAttributesControllerBean.selectedClientPricingDimensions}" 
+                                                                 selectionMode="single" 
+                                                                 styleClass="table table-bordered">
+
+
+
+                                                        <f:facet name="header">
+                                                            <p:commandButton process="dataTable1" update="dataTable1" value="Add Pricing Dimension" actionListener="#{productAttributesControllerBean.provisionDimension()}" oncomplete="PF('dlg5').show();"/>   
+                                                        </f:facet> 
+
+                                                      
+                                                        <p:ajax event="rowSelect" update=":formE" listener="#{productAttributesControllerBean.loadClientPricingDimensionsDomainValuesByDomainID()}" /> -->
+                                                         
+                                                        <p:column headerText="Code" style="width:10%">     
+                                                           <h:outputText value="#{pricingdimensions.clientPricingDimensionsCode}" style="width:96%"/>
+                                                        </p:column>
+
+                                                        <p:column headerText="Description" style="width:30%">    
+                                                            <h:outputText value="#{pricingdimensions.description}" style="width:96%"/>
+                                                        </p:column>
+
+                                                        <p:column style="width:5%" >                                     
+                                                            <p:commandButton  id="removeProductButton" value="Remove" update=":formP,:formE" actionListener="#{productAttributesControllerBean.removeClientPricingDimensions(pricingdimensions)}"/>
+                                                        </p:column>
+                                                        
+                                                        <p:column style="width:5%" >                                     
+                                                            <p:commandButton  id="editProductButton"  value="Edit" update=":formP" />
+                                                        </p:column>
+                                                    </p:dataTable>
+
+                                                </h:form> 
+                                                <p:dialog header="New Dimension" widgetVar="dlg5" modal="true">
+                                                            <h4 class="widgettitle nomargin shadowed">Add Dimension</h4>
+                                                            <div class="widgetcontent bordered shadowed">                            
+                                                                <h:form id="formD" >         
+                                                                        <table style="border: #ffffff" cellspacing="5" >
+                                                                        <tr>
+                                                                            <td>
+                                                                           <h:outputLabel value="Code " style="font-size:14px;" />
+                                                                          </td>
+                                                                          <td>
+                                                                              <p:inputText id="codeP" size="10" maxlength="10"  type="text" value="#{productAttributesControllerBean.nextClientPricingDimension.clientPricingDimensionsCode}"/>
+                                                                          </td> 
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>
+                                                                           <h:outputLabel value="Description " style="font-size:14px;" />
+                                                                          </td>
+                                                                          <td>
+                                                                              <p:inputText id="descriptionD" size="30" maxlength="30"  type="text" value="#{productAttributesControllerBean.nextClientPricingDimension.description}"/>
+                                                                          </td> 
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td>
+                                                                           </td>
+                                                                            <td>
+                                                                              <br/>
+                                                                              <p:commandButton value="Add Pricing Dimension" onclick="PF('dlg5').hide()" process="@form" update=":formP,:formE" action="#{productAttributesControllerBean.addClientPricingDimension()}" style="margin-bottom:14px;font-size:14px;margin-left: 14px;float:right"/>   
+                                                                                <!-- <p:commandButton value="   Close   "  type="button" onclick="PF('dlg4').hide()" style="margin-bottom:14px;font-size:14px;margin-left: 14px; background:cross-fade; float:right" />-->
+                                                                            </td>   
+                                                                        </tr>
+                                                                        </table>    
+                                                                </h:form>         
+                                                            </div><!--widgetcontent-->  
+                                                </p:dialog> 
+                                        </div><!--widgetcontent-->          
+                                </div> <!---span6-->
+                                <div class="span6">
+                                    <h4 class="widgettitle">Domain Values</h4>
+                                    <div class="widgetcontent">
+                                        <h:form id="formE"> 
+                                                    <p:dataTable id="dataTable2" var="pricingdimensionsdomainvalues" value="#{productAttributesControllerBean.allClientPricingDimensionsDomainValues}"
+                                                                 editable="true" 
+                                                                 editMode="cell"
+                                                                 rows="20"
+                                                                 rowKey="#{pricingdimensionsdomainvalues.clientPricingDimensionsDomainValuesID}"
+                                                                 selection="#{productAttributesControllerBean.selectedClientPricingDimensionsDomainValues}" 
+                                                                 selectionMode="single" 
+                                                                 styleClass="table table-bordered">
+
+
+
+                                                        <f:facet name="header">
+                                                            <p:commandButton process="dataTable2" update="dataTable2" value="Add Domain Value : #{productAttributesControllerBean.selectedClientPricingDimension.description}" actionListener="#{productAttributesControllerBean.provisionDimensionDomainValues()}" oncomplete="PF('dlg6').show();" disabled="#{productAttributesControllerBean.selectedClientPricingDimension == null? 'true': 'false'}"/>   
+                                                        </f:facet> 
+
+
+                                                        <p:ajax event="cellEdit" listener="#{productAttributesControllerBean.onPricingDimensionDomainValueEdit}" update="dataTable2" />  
+
+                                                        <p:column headerText="Code" style="width:10%">     
+                                                            <p:cellEditor>
+                                                                <f:facet name="output"><h:outputText value="#{pricingdimensionsdomainvalues.clientPricingDimensionsDomainValuesCode}" /></f:facet>
+                                                                <f:facet name="input"><p:inputText value="#{pricingdimensionsdomainvalues.clientPricingDimensionsDomainValuesCode}" style="width:96%" label="Code"/></f:facet>
+                                                            </p:cellEditor>
+                                                        </p:column>
+
+                                                        <p:column headerText="Description" style="width:30%">    
+                                                            <p:cellEditor>
+                                                                <f:facet name="output"><h:outputText value="#{pricingdimensionsdomainvalues.clientPricingDimensionsDomainValuesDescription}" /></f:facet>
+                                                                <f:facet name="input"><p:inputText value="#{pricingdimensionsdomainvalues.clientPricingDimensionsDomainValuesDescription}" style="width:96%" label="Description"/></f:facet>
+                                                            </p:cellEditor>
+                                                        </p:column>
+
+                                                        <p:column style="width:5%" >                                     
+                                                            <p:commandButton  id="removeDomainButton" value="Remove" update=":formE" actionListener="#{productAttributesControllerBean.removeClientPricingDimensionsDomainValues(pricingdimensionsdomainvalues)}"/>
+                                                        </p:column>
+
+
+                                                        <p:column style="width:5%" >                                     
+                                                            <p:commandButton  id="updateDomainButton"  value="Update" update=":formE" actionListener="#{productAttributesControllerBean.updateClientPricingDimensionsDomainValue(pricingdimensionsdomainvalues)}"/>
+                                                        </p:column>
+                                                        
+                                                        <p:column style="width:5%" >                                     
+                                                            <p:commandButton  id="editDomainButton"  value="Edit" update=":formE" oncomplete="PF('dlg6').show();"/>
+                                                        </p:column>
+                                                    </p:dataTable>
+
+                                                </h:form> 
+                                                <p:dialog header="New Domain Value" widgetVar="dlg6" modal="true">
+                                                            <h4 class="widgettitle nomargin shadowed">Add Domain Value</h4>
+                                                            <div class="widgetcontent bordered shadowed">                            
+                                                                <h:form id="formF" >         
+                                                                        <table style="border: #ffffff" cellspacing="5" >
+                                                                        <tr>
+                                                                            <td>
+                                                                           <h:outputLabel value="Code " style="font-size:14px;" />
+                                                                          </td>
+                                                                          <td>
+                                                                              <p:inputText id="codeQ" size="10" maxlength="10"  type="text" value="#{productAttributesControllerBean.nextClientPricingDimensionsDomainValue.clientPricingDimensionsDomainValuesCode}"/>
+                                                                          </td> 
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>
+                                                                           <h:outputLabel value="Description " style="font-size:14px;" />
+                                                                          </td>
+                                                                          <td>
+                                                                              <p:inputText id="descriptionQ" size="30" maxlength="30"  type="text" value="#{productAttributesControllerBean.nextClientPricingDimensionsDomainValue.clientPricingDimensionsDomainValuesDescription}"/>
+                                                                          </td> 
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td>
+                                                                           </td>
+                                                                            <td>
+                                                                              <br/>
+                                                                              <p:commandButton value="Add Domain Value" onclick="PF('dlg6').hide()" process="@form" update=":formE" action="#{productAttributesControllerBean.addClientPricingDimensionsDomainValues()}" style="margin-bottom:14px;font-size:14px;margin-left: 14px;float:right"/>   
+                                                                                <!-- <p:commandButton value="   Close   "  type="button" onclick="PF('dlg4').hide()" style="margin-bottom:14px;font-size:14px;margin-left: 14px; background:cross-fade; float:right" />-->
+                                                                            </td>   
+                                                                        </tr>
+                                                                        </table>    
+                                                                </h:form>         
+                                                            </div><!--widgetcontent-->  
+                                                </p:dialog> 
+                                    </div> <!--widgetcontent-->  
+                                </div> <!---span6-->
+                    </div> <!-- row-fluid -->            
+                    <div class="row-fluid">                
+                       <div class="span12">  
+
+                        </div><!--span12-->                                  
+
+                           
+                    </div> <!-- row-fluid -->
+
+            </ui:composition>
+        </h:body>
+    </f:view>
+</html>

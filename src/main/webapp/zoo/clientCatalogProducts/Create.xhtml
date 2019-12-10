@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateClientCatalogProductsTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateClientCatalogProductsLabel_clientCatalogidClientCatalog}" for="clientCatalogidClientCatalog" />
+                    <h:inputText id="clientCatalogidClientCatalog" value="#{clientCatalogProductsController.selected.clientCatalogidClientCatalog}" title="#{bundle.CreateClientCatalogProductsTitle_clientCatalogidClientCatalog}" required="true" requiredMessage="#{bundle.CreateClientCatalogProductsRequiredMessage_clientCatalogidClientCatalog}"/>
+                    <h:outputLabel value="#{bundle.CreateClientCatalogProductsLabel_listPrice}" for="listPrice" />
+                    <h:inputText id="listPrice" value="#{clientCatalogProductsController.selected.listPrice}" title="#{bundle.CreateClientCatalogProductsTitle_listPrice}" />
+                    <h:outputLabel value="#{bundle.CreateClientCatalogProductsLabel_negotiatedPrice}" for="negotiatedPrice" />
+                    <h:inputText id="negotiatedPrice" value="#{clientCatalogProductsController.selected.negotiatedPrice}" title="#{bundle.CreateClientCatalogProductsTitle_negotiatedPrice}" />
+                    <h:outputLabel value="#{bundle.CreateClientCatalogProductsLabel_upcharge}" for="upcharge" />
+                    <h:inputText id="upcharge" value="#{clientCatalogProductsController.selected.upcharge}" title="#{bundle.CreateClientCatalogProductsTitle_upcharge}" />
+                    <h:outputLabel value="#{bundle.CreateClientCatalogProductsLabel_clientSplit}" for="clientSplit" />
+                    <h:inputText id="clientSplit" value="#{clientCatalogProductsController.selected.clientSplit}" title="#{bundle.CreateClientCatalogProductsTitle_clientSplit}" />
+                    <h:outputLabel value="#{bundle.CreateClientCatalogProductsLabel_client}" for="client" />
+                    <h:selectOneMenu id="client" value="#{clientCatalogProductsController.selected.client}" title="#{bundle.CreateClientCatalogProductsTitle_client}" required="true" requiredMessage="#{bundle.CreateClientCatalogProductsRequiredMessage_client}">
+                        <f:selectItems value="#{clientController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{clientCatalogProductsController.create}" value="#{bundle.CreateClientCatalogProductsSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{clientCatalogProductsController.prepareList}" value="#{bundle.CreateClientCatalogProductsShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateClientCatalogProductsIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

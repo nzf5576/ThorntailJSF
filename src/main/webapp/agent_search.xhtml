@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <f:metadata>
+ 
+        <f:viewAction action="#{searchControllerBean.prePageRender()}"/>    
+    </f:metadata>
+    
+   
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <title>HCPricingEngine</title>
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+ 
+                    <style type="text/css">
+                    .logopanel, .ui-datepicker-calendar td.ui-datepicker-today a, .tabs2.ui-tabs .ui-tabs-nav li a {
+                    background: #f7f7f7 url(../img/mainbg.png) repeat-y 0 0;
+                    }
+                    </style>
+            </f:facet>
+            
+        </h:head>
+        <h:body>          
+            <ui:composition>
+
+                    <p:growl id="growl" showDetail="true" sticky="false" />     
+                    <div class="row-fluid">
+                    <div class="span10">
+                     <h4 class="widgettitle nomargin shadowed">Client Search</h4>
+                     <div class="widgetcontent bordered shadowed"> 
+                                <h:form id="getcode"> 
+                                    <p:inputText id="search" value="#{searchControllerBean.searchCriteria}" label="search"  required="true"/> 
+                                    <p:watermark for="search" value="Last Name or SSN" />
+                                    <br/>
+                                    <p:commandButton process="@form" update="@form" id="searchButton1" value="Search By Last Name" actionListener="#{searchControllerBean.countPersonsByLastName()}"  style="color: white; background: green; "/>                                                
+                                    <p:commandButton process="@form" update="@form" id="searchButton2" value="Search By SSN" actionListener="#{searchControllerBean.countPersonsBySSN()}"  style="color: white; background: green; "/>          
+                                    <p:commandButton process="@form" update=":formP" id="searchButton3" value="Get Persons" actionListener="#{searchControllerBean.searchPersons()}" style="color: white; background: green; "/>  
+                                <p:outputLabel value="Hits : #{searchControllerBean.getHits()}" style="color: RED"/>
+                                </h:form> 
+                                    <br/>
+                        </div> <!--widgetcontent bordered shadowed-->
+                      
+                        <h4 class="widgettitle">Persons</h4>
+                        <div class="widgetcontent">
+
+                            <h:form id="formP" > 
+                                    <p:dataTable id="dataTable1" var="persons" value="#{searchControllerBean.allPersons}"
+                                             rows="20"
+                                             rowKey="#{persons.id}"
+                                             selection="#{searchControllerBean.selectedPerson}" 
+                                             selectionMode="single" 
+                                             styleClass="table table-bordered">
+                                         
+                                
+                                    <p:ajax id="jammer" event="rowSelect" process="@this" update="@this,:formC" listener="#{searchControllerBean.loadAllProcesses(searchControllerBean.selectedPerson.ssn)}" /> 
+                                   
+                                    <p:column headerText="New Messages" style="width:6%">    
+                                        <h:outputText value=" #{searchControllerBean.unreadMessageCount(persons.cell_phone)}"/>       
+                                    </p:column>
+                                          
+                                    <p:column headerText="New Documents" style="width:6%">    
+                                        <h:outputText value=" #{searchControllerBean.unreviewedInboundDocumentCount(persons.ssn)}"/>                                                                  
+                                    </p:column>
+                                        
+                                                                                                       
+                                    <p:column headerText="Name" sortBy="lname" style="width:10%">
+                                        <h:outputText value="#{persons.lname}, #{persons.fname}" />
+                                    </p:column>
+                                    
+                                    <p:column headerText="SSN" sortBy="ssn" style="width:5%">
+                                        <h:outputText value="#{persons.ssn}" />
+                                    </p:column>  
+                                    
+                                    <p:column headerText="Phone" sortBy="cell_phone" style="width:10%">
+                                        <h:outputText value="#{persons.cell_phone}">
+                                           <f:convertNumber pattern="(###) ####-####"/>
+                                        </h:outputText>     
+                                    </p:column>                                 
+                           
+                                    <f:facet name="footer">
+                                        <p:selectOneMenu id="affiliates" value="#{agentControllerBean.selectedaffiliate}" converter="omnifaces.SelectItemsConverter" disabled="#{searchControllerBean.selectedPerson == null? 'true': 'false'}" >
+                                            <f:selectItem itemLabel="Select One" itemValue="" />
+                                            <f:selectItems value="#{agentControllerBean.allAffiliates}" var="affiliate" itemValue="#{affiliate}" itemLabel="#{affiliate.businessname}"/>
+                                            <p:ajax listener="#{searchControllerBean.setSelectedAffiliate(agentControllerBean.selectedaffiliate)}" update="externalapp"/>
+                                        </p:selectOneMenu> 
+                                        <p:commandButton id="externalapp" process="@form" update=":formC"  value="New Process" actionListener="#{searchControllerBean.createAndLoadAllProcesses()}" style="margin-bottom:14px; margin-left: 14px;font-size:14px" disabled="#{searchControllerBean.selectedAffiliate == null? 'true': 'false'}"/>      
+                                    </f:facet> 
+                
+                                </p:dataTable>
+                                   
+                                </h:form>     
+                        </div><!--widgetcontent-->
+                        <!--
+                        <p:dialog widgetVar="dlg1" minHeight="40">
+                            <h:form id="formAffiliates"> 
+                                <p:outputLabel for="affiliates" value="Affiliates:" />
+                                <p:selectOneMenu id="affiliates" value="{agentControllerBean.selectedaffiliate}" converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItems value="{agentControllerBean.allAffiliates}" var="affiliate" itemValue="{affiliate}" itemLabel="{affiliate.businessname}"/>
+                                    </p:selectOneMenu>  
+                                <br></br>
+                                <p:commandButton id="fetchButton" process="@form" value="Select"  oncomplete="PF('dlg1').hide();"  actionListener="{identityControllerBean.setSelectedAffiliate(agentControllerBean.selectedaffiliate)}"/>          
+                            </h:form>  
+                        </p:dialog
+                        -->
+                        
+                        
+                        
+                        <div class="widgetcontent">
+                                 <h:form id="formC" > 
+                                     <h4 class="widgettitle" id="widgett">Processes for:     ${searchControllerBean.selectedPerson.lname}, ${searchControllerBean.selectedPerson.fname}</h4>
+                                      <p:dataTable id="dataTable" var="creditapp" value="#{searchControllerBean.allCreditApplications}"
+                                             rowKey="#{creditapp.id}"
+                                             selection="#{searchControllerBean.selectedApplication}" 
+                                             selectionMode="single"
+                                             styleClass="table table-bordered">
+                                           
+                                    
+                                        <p:column headerText="Action Items" style="width:6%">    
+                                            <p:graphicImage id="statusimg2" url="#{searchControllerBean.getStatusWorkItemIcon(creditapp.id)}" width="15" height="15"/>
+                                            <h:outputText value=" #{searchControllerBean.getStatusWorkItemCount(creditapp.id)}"/>  
+                                        </p:column>
+
+                                        <p:column headerText="Affiliate" style="width:5%">
+                                            <h:outputText value="#{creditapp.affiliateName}" />
+                                        </p:column>  
+
+                                        <p:column headerText="App ID" style="width:5%">
+                                            <h:outputText value="#{creditapp.id}" />
+                                        </p:column>  
+
+                                        <p:column headerText="Access Code" style="width:5%">
+                                            <h:outputText value="#{creditapp.customerAccesssCode}" />
+                                        </p:column>
+
+                                        <p:column headerText="SSN" sortBy="ssn" style="width:7%">
+                                            <h:outputText value="#{creditapp.ssn}" />
+                                        </p:column>  
+
+                                        <p:column headerText="Submitted Date" sortBy="submission_date" style="width:10%">
+                                            <h:outputText value="#{creditapp.submissionDate}" />
+                                        </p:column>
+
+                                        <p:column headerText="Status" sortBy="process_state" style="width:10%">
+                                            <h:outputText value="#{creditapp.processState}" />
+                                        </p:column>
+
+                                        <p:column headerText="Process Type" sortBy="loan_type" style="width:10%">
+                                            <h:outputText value="#{creditapp.loanType}" />
+                                        </p:column>                                  
+
+                                        <p:column style="width:5%" >                                     
+                                            <p:commandButton  id="openButton" ajax="false" value="Open" action="#{applicationControllerBean.gotoApplication(creditapp.id)}" rendered="#{creditapp.processState == 'PRESUBMITTED'? 'true': 'true'}"/>
+                                        </p:column>
+
+                                        <p:column style="width:15%" >                                     
+                                            <p:commandButton  id="sendButton" ajax="false" value="Send Access Code"  actionListener="#{searchControllerBean.sendCustomerAccessCode(searchControllerBean.selectedPerson.cell_phone,creditapp.customerAccesssCode)}" />
+                                        </p:column>
+                                          
+                                          
+                
+                                </p:dataTable>
+                                   
+                                </h:form>   
+                            
+                        </div><!--widgetcontent-->       
+                        
+                    </div><!--span8--> 
+                    </div> <!--row-fluid-->
+          
+                    
+                    
+            </ui:composition>   
+        </h:body>
+    </f:view>
+</html>
+
+                
+                
+                
+   

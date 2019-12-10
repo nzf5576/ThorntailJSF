@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateHCProductCatalogReferenceTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateHCProductCatalogReferenceLabel_idProductCatalog}" for="idProductCatalog" />
+                    <h:inputText id="idProductCatalog" value="#{hCProductCatalogReferenceController.selected.idProductCatalog}" title="#{bundle.CreateHCProductCatalogReferenceTitle_idProductCatalog}" required="true" requiredMessage="#{bundle.CreateHCProductCatalogReferenceRequiredMessage_idProductCatalog}"/>
+                    <h:outputLabel value="#{bundle.CreateHCProductCatalogReferenceLabel_description}" for="description" />
+                    <h:inputText id="description" value="#{hCProductCatalogReferenceController.selected.description}" title="#{bundle.CreateHCProductCatalogReferenceTitle_description}" />
+                    <h:outputLabel value="#{bundle.CreateHCProductCatalogReferenceLabel_listPrice}" for="listPrice" />
+                    <h:inputText id="listPrice" value="#{hCProductCatalogReferenceController.selected.listPrice}" title="#{bundle.CreateHCProductCatalogReferenceTitle_listPrice}" />
+                    <h:outputLabel value="#{bundle.CreateHCProductCatalogReferenceLabel_productCatalog}" for="productCatalog" />
+                    <h:inputText id="productCatalog" value="#{hCProductCatalogReferenceController.selected.productCatalog}" title="#{bundle.CreateHCProductCatalogReferenceTitle_productCatalog}" />
+                    <h:outputLabel value="#{bundle.CreateHCProductCatalogReferenceLabel_productGroup}" for="productGroup" />
+                    <h:inputText id="productGroup" value="#{hCProductCatalogReferenceController.selected.productGroup}" title="#{bundle.CreateHCProductCatalogReferenceTitle_productGroup}" />
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{hCProductCatalogReferenceController.create}" value="#{bundle.CreateHCProductCatalogReferenceSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{hCProductCatalogReferenceController.prepareList}" value="#{bundle.CreateHCProductCatalogReferenceShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateHCProductCatalogReferenceIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

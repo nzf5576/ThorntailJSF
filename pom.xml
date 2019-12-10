@@ -19,7 +19,7 @@
 
     <failOnMissingWebXml>true</failOnMissingWebXml>
 
-    <version.thorntail>2.5.0.Final</version.thorntail>
+    <version.thorntail>2.6.0.Final</version.thorntail>
   </properties>
   
 
@@ -53,6 +53,22 @@
    </build>
    <dependencies>
       <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>undertow</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>io.thorntail</groupId>
+         <artifactId>web</artifactId>          
+      </dependency>
+      <dependency>
+         <groupId>io.thorntail</groupId>
+         <artifactId>jpa</artifactId>          
+      </dependency>
+        <dependency>
+          <groupId>io.thorntail</groupId>
+          <artifactId>jpa-eclipselink</artifactId>
+        </dependency>
+      <dependency>
          <groupId>io.thorntail</groupId>
          <artifactId>cdi</artifactId>          
       </dependency>
@@ -61,9 +77,37 @@
          <artifactId>jsf</artifactId> 
       </dependency>
       <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>ejb</artifactId>
+      </dependency>
+      <dependency>
          <groupId>org.primefaces</groupId>
          <artifactId>primefaces</artifactId>
          <version>6.2</version>
       </dependency>
+        <dependency>
+            <groupId>org.omnifaces</groupId>
+            <artifactId>omnifaces</artifactId>
+            <version>3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.primefaces.extensions</groupId>
+            <artifactId>primefaces-extensions</artifactId>
+            <version>6.1.0</version>
+        </dependency>
+        <dependency>
+          <groupId>io.thorntail</groupId>
+          <artifactId>datasources</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>com.h2database</groupId>
+          <artifactId>h2</artifactId>
+          <version>1.4.200</version>
+        </dependency>
+        <dependency>
+          <groupId>mysql</groupId>
+          <artifactId>mysql-connector-java</artifactId>
+          <version>8.0.18</version>
+        </dependency>      
    </dependencies>
 </project>

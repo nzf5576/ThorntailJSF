@@ -1,0 +1,126 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <title>iLendTech</title>
+                     <meta charset="utf-8"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+            
+            <meta name="description" content=""/>
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            
+             <meta http-equiv="cache-control" content="max-age=0" />
+                <meta http-equiv="cache-control" content="no-cache" />
+                <meta http-equiv="expires" content="0" />
+                <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+                <meta http-equiv="pragma" content="no-cache" />
+                
+                <link rel="stylesheet" href="css/reset.css" type="text/css" />                
+                <link rel="stylesheet" href="css/style.default.css" type="text/css" />
+                <link rel="stylesheet" href="prettify/prettify.css" type="text/css" />
+
+                <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+
+                <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+                <script type="text/javascript" src="js/jquery-migrate-1.1.1.min.js"></script>
+                <script type="text/javascript" src="js/jquery-ui-1.9.2.min.js"></script>
+                <script type="text/javascript" src="js/bootstrap.min.js"></script>
+                <script type="text/javascript" src="js/jquery.cookie.js"></script>
+                <script type="text/javascript" src="js/custom.js"></script>
+
+
+                <style type="text/css">
+                .logopanel, .ui-datepicker-calendar td.ui-datepicker-today a, .tabs2.ui-tabs .ui-tabs-nav li a {
+                background: #f7f7f7 url(../img/mainbg.png) repeat-y 0 0;
+                }
+                
+                .mainwrapperl { 
+                        width: 1280px; margin: auto; background: #f7f7f7; position: relative; 
+                        overflow: hidden; -moz-box-shadow: 0 0 5px rgba(0,0,0,0.1); 
+                        -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.1); box-shadow: 0 0 5px rgba(0,0,0,0.1); padding-bottom: 60px; 
+                }
+                .fullwrapperl { width: auto; border: 0; }
+                
+                </style>
+            </f:facet>
+             
+        </h:head>
+        <h:body>                 
+            <div class="mainwrapperl fullwrapperl">
+
+                    <div class="headerpanel">
+                        <div class="headerleft"> <!--  TOP LEFT HAND -->
+                            <h:form>
+                                <p:commandLink class="showmenu" type="submit" ajax="false" target="_top" value="" action="agent_main"/>
+                            </h:form>
+                        </div>
+                            
+                        <div class="headerright"> <!--  TOP RIGHT HAND -->
+                            <h:form>                    
+                            <a class="notification-btn" href="tel:+2103865352">
+                                <span class="iconsweets-phone3 iconsweets-white"></span> 
+                            </a>
+
+                            <a class="notification-btn" href="#">
+                                <span class="iconsweets-list iconsweets-white"></span> <span class="badge badge-info"><h:outputText id="txt_count" value="#{controllerBean.outstandingworkitemcount}" /></span>
+                            </a>
+                            <p:poll interval="60" listener="#{controllerBean.updateOutstandingWorkItemCount()}" update="txt_count" />
+                           
+                            <a class="notification-btn" data-toggle="dropdown" data-target="#" href="/agent-login.xhtml">
+                                <span class="iconsweets-globe iconsweets-white"></span>
+                            </a>
+                                
+                            <a>    
+                                <p:commandLink class="notification-btn" type="submit" ajax="false" target="_top" value="LogOut: #{controllerBean.a.fname}" action="#{controllerBean.logOut()}" /> 
+                            </a>   
+   
+                                
+                            </h:form>
+                        </div><!--headerright-->
+
+                    </div><!--headerpanel-->
+                    <div class="breadcrumbwidget">
+                            <ul class="breadcrumb">
+                       <li><span style="color:white">#{controllerBean.app.fname} #{controllerBean.app.lname}</span><span class="divider">/</span><span style="color:white">Affinity: #{controllerBean.affinity_name}</span> <span class="divider">/</span><span style="color:white">Process ID: #{controllerBean.app.id}</span></li>
+                     </ul>
+                    </div><!--breadcrumbs-->
+                    <div class="pagetitle">
+                            <h1><span class="label label-warning">ALERT</span></h1> <span>Compliance is seeing an increase of fraud attempts.  Follow verification procedures.</span>
+                    </div><!--pagetitle-->
+
+                    <div class="maincontent">
+                            <div class="contentinner content-bootstrap">
+                                <!-- START MAIN CONTENT --> 
+
+                                    <ui:insert name="corecontent" >
+                                        <ui:include src="#{controllerBean.nextAction()}.xhtml" />
+                                    </ui:insert> 
+
+
+                                <!-- END MAIN CONTENT -->
+                        </div><!--contentinner-->
+                    </div><!--maincontent-->
+                    
+                <div class="clearfix"></div>
+
+                <div class="footer">
+                    <div class="footerleft">Katniss Premium Admin Template v1.0</div>
+                    <div class="footerright">ThemePixels - <a href="http://twitter.com/themepixels">Follow me on Twitter</a> - <a href="http://dribbble.com/themepixels">Follow me on Dribbble</a></div>
+                </div><!--footer-->
+
+
+
+            </div><!--mainwrapper-->
+
+            
+        </h:body>
+    </f:view>
+</html>

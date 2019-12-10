@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <title>UPP</title>
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+
+                    <style type="text/css">
+                    .logopanel, .ui-datepicker-calendar td.ui-datepicker-today a, .tabs2.ui-tabs .ui-tabs-nav li a {
+                    background: #f7f7f7 url(../img/mainbg.png) repeat-y 0 0;
+                    }
+                    </style>
+                    
+                    <script type="text/javascript">
+                        function setSIDValue(new_value){
+                             window.alert("PRE :"+document.getElementById('tabView:dataTableWR:0:rsid').value);
+                             document.getElementById('tabView:dataTableWR:0:rsid').value = new_value;
+                             window.alert("POST :"+document.getElementById('tabView:dataTableWR:0:rsid').value+" Called from: "+document.getSelection());
+                        }
+                    </script>
+                    
+            </f:facet>
+            
+        </h:head>
+        <h:body>          
+          <ui:composition>  
+                    <h4 class="widgettitle">Pricing Setup</h4>
+                    <div class="row-fluid">
+                                <div class="span4">
+                                    <h4 class="widgettitle">CLIENT CONTRACTS </h4>
+                                    <div class="widgetcontent">
+                                    <h:form id="formClients" prependId="false"> 
+                                        <p:outputLabel for="clients" value="Client Contracts:" />
+                                            <p:selectOneMenu id="clients" value="#{globalPricingControllerBean.selectedClient}" converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="Select Client Contract" itemValue="" noSelectionOption="true" />
+                                                <f:selectItems value="#{globalPricingControllerBean.allClients}" var="client" itemValue="#{client}" itemLabel="#{client.contractNumber} :#{client.clientname}"/>
+                                                <p:ajax listener="#{globalPricingControllerBean.loadBranches()}"  oncomplete="submit()" />
+                                            </p:selectOneMenu>  
+                                        <br></br>
+                                       <!-- <p:commandButton id="fetchButton1" process="@form" update=":formClients,:formBranches,:formClubCodes,formP:dataTable1" value="Get Branches" actionListener="{globalPricingControllerBean.loadBranches()}"/>    -->      
+                                        <p:commandButton id="fetchButton1a" value="Add Pricing Contract" oncomplete="PF('dlg2').show();" actionListener="#{globalPricingControllerBean.provisionClient()}" />                                            
+
+                                    </h:form>  
+                                            <p:dialog header="New Pricing Contract" widgetVar="dlg2" modal="true">
+                                            <h4 class="widgettitle nomargin shadowed">Add Client Contract</h4>
+                                            <div class="widgetcontent bordered shadowed">                            
+                                                <h:form id="actionForm" >         
+                                                        <table style="border: #ffffff" cellspacing="5" >
+                                                        <tr>
+                                                            <td>
+                                                           <h:outputLabel value="Client Name: " style="font-size:14px;" />
+                                                          </td>
+                                                          <td>
+                                                              <p:inputText id="search" value="#{globalPricingControllerBean.nextClient.clientname}" label="search"  required="true"/> 
+                                                          </td> 
+                                                        </tr>
+                                                         <tr>
+                                                            <td>
+                                                           <h:outputLabel value="Client Contract: " style="font-size:14px;" />
+                                                          </td>
+                                                          <td>
+                                                              <p:inputText id="search2" value="#{globalPricingControllerBean.nextClient.contractNumber}" label="search2"  required="true"/> 
+                                                          </td> 
+                                                        </tr>
+                                                        <tr>
+                                                           <td>
+                                                           </td>
+                                                            <td>
+                                                              <br/>
+                                                              <p:commandButton value="Create Client Contract" onclick="PF('dlg2').hide()" process="@form" update=":formClients" action="#{globalPricingControllerBean.addClient()}" style="margin-bottom:14px;font-size:14px;margin-left: 14px;float:right"/>   
+                                                            </td>   
+                                                        </tr>
+                                                        </table>    
+                                                </h:form>         
+                                            </div><!--widgetcontent-->  
+                                        </p:dialog>        
+                                    </div> <!--widgetcontent-->
+                                </div><!--span4-->
+                                <div class="span4">
+                                    <h4 class="widgettitle">TR BRANCH NUMBER</h4>
+                                    <div class="widgetcontent">
+                                    <h:form id="formBranches" prependId="false"> 
+                                        <p:outputLabel for="branches" value="TRBranches:" />
+                                            <p:selectOneMenu id="branches" value="#{globalPricingControllerBean.selectedBranch}" converter="omnifaces.SelectItemsConverter" disabled="#{globalPricingControllerBean.selectedClient == null? 'true': 'false'}">
+                                                <f:selectItem itemLabel="Select Branch" itemValue="" noSelectionOption="true" />
+                                                <f:selectItems value="#{globalPricingControllerBean.allBranches}" var="branch" itemValue="#{branch}" itemLabel="#{branch.transitRoutingNumber}"/>
+                                                <p:ajax listener="#{globalPricingControllerBean.loadClubCodes()}"   oncomplete="submit()"/>
+                                            </p:selectOneMenu>  
+                                        <br></br>
+                                        <!--<p:commandButton id="fetchButton2" process="@form" update="@this,:formBranches,:formClubCodes,formP:dataTable1" value="Get Club Codes" actionListener="{globalPricingControllerBean.loadClubCodes()}" disabled="{globalPricingControllerBean.selectedBranch == null? 'true': 'false'}"/>    -->      
+                                        <p:commandButton id="fetchButton2a" value="Add TRBranch" oncomplete="PF('dlg3').show();" actionListener="#{globalPricingControllerBean.provisionBranch()}" disabled="#{globalPricingControllerBean.selectedClient == null? 'true': 'false'}"/> 
+                                    </h:form>
+                                        <p:dialog header="New TRBranch" widgetVar="dlg3" modal="true">
+                                            <h4 class="widgettitle nomargin shadowed">Add TRBranch</h4>
+                                            <div class="widgetcontent bordered shadowed">                            
+                                                <h:form id="actionForm2" >         
+                                                        <table style="border: #ffffff" cellspacing="5" >
+                                                        <tr>
+                                                            <td>
+                                                           <h:outputLabel value="TR Number: " style="font-size:14px;" />
+                                                          </td>
+                                                          <td>
+                                                              <p:inputText id="search3" value="#{globalPricingControllerBean.nextBranch.transitRoutingNumber}" label="search3"  required="true"/> 
+                                                          </td> 
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                           <h:outputLabel value="Branch Name: " style="font-size:14px;" />
+                                                          </td>
+                                                          <td>
+                                                              <p:inputText id="search4" value="#{globalPricingControllerBean.nextBranch.branchNumber}" label="search4"  required="true"/> 
+                                                          </td> 
+                                                        </tr>
+                                                        <tr>
+                                                           <td>
+                                                           </td>
+                                                            <td>
+                                                              <br/>
+                                                              <p:commandButton value="Create TR/Branch" onclick="PF('dlg3').hide()" process="@form" update=":formBranches" action="#{globalPricingControllerBean.addBranch()}" style="margin-bottom:14px;font-size:14px;margin-left: 14px;float:right"/>   
+                                                                <!-- <p:commandButton value="   Close   "  type="button" onclick="PF('dlg4').hide()" style="margin-bottom:14px;font-size:14px;margin-left: 14px; background:cross-fade; float:right" />-->
+                                                            </td>   
+                                                        </tr>
+                                                        </table>    
+                                                </h:form>         
+                                            </div><!--widgetcontent-->  
+                                        </p:dialog>       
+                                    </div> <!--widgetcontent-->                                        
+                                </div><!--span4-->
+                                <div class="span4">
+                                    <h4 class="widgettitle">ACCOUNT PLAN </h4>
+                                    <div class="widgetcontent">                                    
+                                    <h:form id="formClubCodes" prependId="false"> 
+                                        <p:outputLabel for="clubcodes" value="Account Plans:" />
+                                            <p:selectOneMenu id="clubcodes" value="#{globalPricingControllerBean.selectedClubCode}" converter="omnifaces.SelectItemsConverter" disabled="#{globalPricingControllerBean.selectedBranch == null? 'true': 'false'}">
+                                                <f:selectItem itemLabel="Select Account Plan" itemValue="" noSelectionOption="true" />
+                                                <f:selectItems value="#{globalPricingControllerBean.allClubCodes}" var="clubcode" itemValue="#{clubcode}" itemLabel="#{clubcode.clubCodecName}" />
+                                                <p:ajax listener="#{globalPricingControllerBean.loadClientProducts()}"  oncomplete="submit()"/>
+                                            </p:selectOneMenu>  
+                                        <br></br>
+                                        <!--<p:commandButton id="fetchButton3" process="@form" update="@this,:formClubCodes,formP:dataTable1" value="Get Products" actionListener="{globalPricingControllerBean.loadClientProducts()}" disabled="{globalPricingControllerBean.selectedClubCode == null? 'true': 'false'}"/>     -->     
+                                        <p:commandButton id="fetchButton3a" value="Add Account Plan" oncomplete="PF('dlg4').show();" actionListener="#{globalPricingControllerBean.provisionClubCode()}" disabled="#{globalPricingControllerBean.selectedBranch == null? 'true': 'false'}" /> 
+                                   
+                                    </h:form>
+                                        <p:dialog header="New Account Plan" widgetVar="dlg4" modal="true">
+                                            <h4 class="widgettitle nomargin shadowed">Add Account Plan</h4>
+                                            <div class="widgetcontent bordered shadowed">                            
+                                                <h:form id="actionForm3" >         
+                                                        <table style="border: #ffffff" cellspacing="5" >
+                                                        <tr>
+                                                            <td>
+                                                           <h:outputLabel value="Account Plan: " style="font-size:14px;" />
+                                                          </td>
+                                                          <td>
+                                                              <p:inputText id="search3" value="#{globalPricingControllerBean.nextClubCode.clubCodecName}" label="search3"  required="true"/> 
+                                                          </td> 
+                                                        </tr>
+                                                        <tr>
+                                                           <td>
+                                                           </td>
+                                                            <td>
+                                                              <br/>
+                                                              <p:commandButton value="Create Account Plan" onclick="PF('dlg4').hide()" process="@form" update=":formClubCodes" action="#{globalPricingControllerBean.addClubCode()}" style="margin-bottom:14px;font-size:14px;margin-left: 14px;float:right"/>   
+                                                                <!-- <p:commandButton value="   Close   "  type="button" onclick="PF('dlg4').hide()" style="margin-bottom:14px;font-size:14px;margin-left: 14px; background:cross-fade; float:right" />-->
+                                                            </td>   
+                                                        </tr>
+                                                        </table>    
+                                                </h:form>         
+                                            </div><!--widgetcontent-->  
+                                        </p:dialog>  
+                                    </div> <!--widgetcontent-->                                       
+                                </div><!--span4-->
+                    </div> <!-- row-fluid -->            
+                    <div class="row-fluid">                
+                       <div class="span12">  
+                        <p:panel id="productdetails">  
+                        <h4 class="widgettitle">Products for : #{globalPricingControllerBean.selectedClient.clientname} -----> TRBranch : #{globalPricingControllerBean.selectedBranch.branchNumber}   -----> Account Plan:  #{globalPricingControllerBean.selectedClubCode.clubCodecName}</h4>
+                        <div class="widgetcontent">                        
+                                <h:form id="formP" > 
+                                    <p:dataTable id="dataTable1" var="clientproducts" value="#{globalPricingControllerBean.allClientCatalogProducts}"
+                                                 editable="true" 
+                                                 editMode="cell"
+                                                 rows="20"
+                                                 rowKey="#{clientproducts.clientCatalogID}"
+                                                 selection="#{globalPricingControllerBean.selectedClientCatalogProduct}" 
+                                                 selectionMode="single" 
+                                                 styleClass="table table-bordered">
+                                        
+     
+                                        
+                                        <f:facet name="header">
+                                            <p:commandButton process="dataTable1" update="dataTable1" value="Add Product" oncomplete="PF('dlg5').show();"  disabled="#{globalPricingControllerBean.selectedClubCode == null? 'true': 'false'}" style="margin-bottom:14px; margin-left: 14px;font-size:14px"/>   
+                                        </f:facet> 
+
+                                        <p:ajax event="cellEdit" listener="#{globalPricingControllerBean.onProductEdit}" update="dataTable1" />  
+                                        
+                                        <p:column headerText="Description" style="width:20%">     
+                                            <h:outputText value="#{clientproducts.productDescription}" />
+                                        </p:column>
+
+                                        <p:column headerText="List Price" style="width:6%">     
+                                            <p:cellEditor>
+                                                 <f:facet name="output"><h:outputText value="#{clientproducts.listPrice}" /></f:facet>
+                                                 <f:facet name="input"><p:inputText value="#{clientproducts.listPrice}" style="width:96%" label="List Price"/></f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+
+                                        <p:column headerText="Negotiated Price" style="width:6%">    
+                                            <p:cellEditor>
+                                                 <f:facet name="output"><h:outputText value="#{clientproducts.negotiatedPrice}" /></f:facet>
+                                                 <f:facet name="input"><p:inputText value="#{clientproducts.negotiatedPrice}" style="width:96%" label="Negotiated Price"/></f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+
+                                        <p:column headerText="Upcharge" style="width:5%">
+                                            <p:cellEditor>
+                                                 <f:facet name="output"><h:outputText value="#{clientproducts.upcharge}" /></f:facet>
+                                                 <f:facet name="input"><p:inputText value="#{clientproducts.upcharge}" style="width:96%" label="Upcharge"/></f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+
+                                        <p:column headerText="Client Split %"  style="width:5%">
+                                            <p:cellEditor>
+                                                <f:facet name="output"><h:outputText value="#{clientproducts.clientSplit}" ><f:convertNumber type="percent" /></h:outputText></f:facet>
+                                                 <f:facet name="input"><p:inputText value="#{clientproducts.clientSplit}" style="width:96%" label="Split"/></f:facet>
+                                            </p:cellEditor>
+
+                                        </p:column>  
+
+                                        <p:column headerText="Client Cost" style="width:5%">
+                                            <h:outputText value="#{(clientproducts.negotiatedPrice+clientproducts.upcharge)*clientproducts.clientSplit}"><f:convertNumber minFractionDigits="2" /></h:outputText> 
+                                        </p:column>                                 
+
+                                        <p:column headerText="Customer Cost" style="width:5%">
+                                            <h:outputText value="#{(clientproducts.negotiatedPrice+clientproducts.upcharge)*(1-clientproducts.clientSplit)}"><f:convertNumber minFractionDigits="2" /></h:outputText> 
+                                        </p:column>
+                                        
+                                        <p:column style="width:5%" >                                     
+                                            <p:commandButton  id="removeProductButton" value="Remove" update="dataTable1" actionListener="#{globalPricingControllerBean.removeClientProducts(clientproducts)}"/>
+                                        </p:column>
+
+
+                                        <p:column style="width:5%" >                                     
+                                            <p:commandButton  id="updateProductButton"  value="Update" update="dataTable1" actionListener="#{globalPricingControllerBean.updateClientProducts(clientproducts)}"/>
+                                        </p:column>
+                                    </p:dataTable>
+
+                                </h:form> 
+                                <p:dialog header="New Product" widgetVar="dlg5" modal="true">
+                                            <h4 class="widgettitle nomargin shadowed">Add Product</h4>
+                                            <div class="widgetcontent bordered shadowed">                            
+                                                <h:form id="actionForm4" >         
+                                                        <table style="border: #ffffff" cellspacing="5" >
+                                                        <tr>
+                                                            <td>
+                                                           <h:outputLabel value="Product: " style="font-size:14px;" />
+                                                          </td>
+                                                          <td>
+                                                            <p:selectOneMenu id="clubcodes" value="#{globalPricingControllerBean.selectedHCProductCatalogReference}" converter="omnifaces.SelectItemsConverter">
+                                                                <f:selectItem itemLabel="Select Product" itemValue="" noSelectionOption="true" />
+                                                                <f:selectItems value="#{globalPricingControllerBean.allHCProductCatalogReference}" var="prodcode" itemValue="#{prodcode}" itemLabel="#{prodcode.description}" />
+                                                            </p:selectOneMenu>                                                                                                                    
+                                                          </td> 
+                                                        </tr>
+                                                        <tr>
+                                                           <td>
+                                                           </td>
+                                                            <td>
+                                                              <br/>
+                                                              <p:commandButton value="Add Client Product" onclick="PF('dlg5').hide()" process="@form" update=":formP" action="#{globalPricingControllerBean.addClientProduct()}" style="margin-bottom:14px;font-size:14px;margin-left: 14px;float:right"/>   
+                                                                <!-- <p:commandButton value="   Close   "  type="button" onclick="PF('dlg4').hide()" style="margin-bottom:14px;font-size:14px;margin-left: 14px; background:cross-fade; float:right" />-->
+                                                            </td>   
+                                                        </tr>
+                                                        </table>    
+                                                </h:form>         
+                                            </div><!--widgetcontent-->  
+                                        </p:dialog> 
+                            </div><!--widgetcontent-->
+                        </p:panel>
+                        </div><!--span12-->                                  
+
+                           
+                    </div> <!-- row-fluid -->
+
+            </ui:composition>
+        </h:body>
+    </f:view>
+</html>

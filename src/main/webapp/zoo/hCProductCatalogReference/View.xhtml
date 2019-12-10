@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewHCProductCatalogReferenceTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewHCProductCatalogReferenceLabel_idProductCatalog}"/>
+                    <h:outputText value="#{hCProductCatalogReferenceController.selected.idProductCatalog}" title="#{bundle.ViewHCProductCatalogReferenceTitle_idProductCatalog}"/>
+                    <h:outputText value="#{bundle.ViewHCProductCatalogReferenceLabel_description}"/>
+                    <h:outputText value="#{hCProductCatalogReferenceController.selected.description}" title="#{bundle.ViewHCProductCatalogReferenceTitle_description}"/>
+                    <h:outputText value="#{bundle.ViewHCProductCatalogReferenceLabel_listPrice}"/>
+                    <h:outputText value="#{hCProductCatalogReferenceController.selected.listPrice}" title="#{bundle.ViewHCProductCatalogReferenceTitle_listPrice}"/>
+                    <h:outputText value="#{bundle.ViewHCProductCatalogReferenceLabel_productCatalog}"/>
+                    <h:outputText value="#{hCProductCatalogReferenceController.selected.productCatalog}" title="#{bundle.ViewHCProductCatalogReferenceTitle_productCatalog}"/>
+                    <h:outputText value="#{bundle.ViewHCProductCatalogReferenceLabel_productGroup}"/>
+                    <h:outputText value="#{hCProductCatalogReferenceController.selected.productGroup}" title="#{bundle.ViewHCProductCatalogReferenceTitle_productGroup}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{hCProductCatalogReferenceController.destroyAndView}" value="#{bundle.ViewHCProductCatalogReferenceDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewHCProductCatalogReferenceEditLink}"/>
+                <br />
+                <h:commandLink action="#{hCProductCatalogReferenceController.prepareCreate}" value="#{bundle.ViewHCProductCatalogReferenceCreateLink}" />
+                <br />
+                <h:commandLink action="#{hCProductCatalogReferenceController.prepareList}" value="#{bundle.ViewHCProductCatalogReferenceShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewHCProductCatalogReferenceIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

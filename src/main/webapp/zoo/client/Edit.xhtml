@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditClientTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditClientLabel_idClientCatalog}" for="idClientCatalog" />
+                    <h:inputText id="idClientCatalog" value="#{clientController.selected.idClientCatalog}" title="#{bundle.EditClientTitle_idClientCatalog}" required="true" requiredMessage="#{bundle.EditClientRequiredMessage_idClientCatalog}"/>
+                    <h:outputLabel value="#{bundle.EditClientLabel_clientname}" for="clientname" />
+                    <h:inputText id="clientname" value="#{clientController.selected.clientname}" title="#{bundle.EditClientTitle_clientname}" />
+                    <h:outputLabel value="#{bundle.EditClientLabel_clientTaxID}" for="clientTaxID" />
+                    <h:inputText id="clientTaxID" value="#{clientController.selected.clientTaxID}" title="#{bundle.EditClientTitle_clientTaxID}" />
+                    <h:outputLabel value="#{bundle.EditClientLabel_clientCatalogProducts}" for="clientCatalogProducts" />
+                    <h:selectOneMenu id="clientCatalogProducts" value="#{clientController.selected.clientCatalogProducts}" title="#{bundle.EditClientTitle_clientCatalogProducts}" >
+                        <f:selectItems value="#{clientCatalogProductsController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandLink action="#{clientController.update}" value="#{bundle.EditClientSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditClientViewLink}"/>
+                <br />
+                <h:commandLink action="#{clientController.prepareList}" value="#{bundle.EditClientShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditClientIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
